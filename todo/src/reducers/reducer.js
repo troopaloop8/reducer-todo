@@ -1,42 +1,41 @@
-
-
-
-
-export let toDos = [{
-    item: 'Make Coffee and drink it',
-    completed: false,
-    id: 3892987588
-  },
-  {
-    item: 'Stretch and some light calisthenics',
-    completed: false,
-    id: 65875643835672456
-  },
-  {
-    item: 'Sumbit my lambda form',
-    completed: false,
-    id: 234562457572456
-  }];
-
-export const reducer = (state, action) => {
+export const initialTitleState = {
+    title: "Welcome to the TO DO L I S  T",
+  };
+  
+  export const initialToDoItemsState = {
+    itemsArray: [{ name: "test", id: 534324523, isCompleted: false }]
+  };
+  
+  export const reducer = (state, action) => {
     switch (action.type) {
-      case `ADD_TODO`:
-        let idTag = new Date();
-        return [...state, {
-          item: action.payload,
-          completed: false,
-          id: idTag.getTime()
-        }];
-      case `TOGGLE_TODO`:
-        return state.map(toDo => {
-          if (toDo.item === action.payload) {
-              toDo.completed = toDo.completed ? false : true;
-          }
-          return toDo;
-        });
-      case `CLEAR_TODOS`:
-        return state.filter(toDo => toDo.completed === false);
-        default:
-            return state;
+      case "ADD_ITEM":
+        console.log(`adding ${action}`);
+        return {
+          itemsArray: [...state.itemsArray, action.payload],
+        };
+      case "REMOVE_ITEM":
+        return {
+          itemsArray: state.itemsArray.filter((e) => e.id != action.payload.id),
+        };
+      case "TOGGLE_COMPLETED":
+        return {
+          itemsArray: state.itemsArray.map((e) => {
+            if (e.id === action.payload.id) {
+              return { ...e, isCompleted: !e.isCompleted };
+            }
+            return e;
+          }),
+        };
+      case "CLEAR_ALL":
+        return {
+          itemsArray: [],
+        };
+      case "CLEAR_COMPLETED":
+        return {
+          itemsArray: state.itemsArray.filter((e) => e.isCompleted === false),
+        };
+  
+      default:
+        return state;
     }
   };
